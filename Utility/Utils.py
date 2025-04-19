@@ -26,6 +26,10 @@ def fix_emojis(text, font):
     res = emoji.replace_emoji(text, replace=add_font)
     return res
 
+def strip_quotes(path):
+    if path.startswith('"') and path.endswith('"'):
+        return path[1:-1]
+    return
 
 def check_path(path=None):
     if path is None:
