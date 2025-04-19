@@ -148,11 +148,6 @@ Visit their Github page for more information or to get some help:
                 self.view.show_dialog('Encrypted database is selected but no key has been provided!', title='Error',
                                       auto_dismiss=True)
                 return
-            elif not check_path(key):
-                self.view.show_dialog(f'Please recheck the provided key path\n`{key}`'
-                                      f'\ndoes not exist',
-                                      title="Error", auto_dismiss=True)
-                return
             else:
                 # trying to decrypt
                 self.view.show_dialog('Trying to decrypt ...', title='Please wait ...', auto_dismiss=False)
