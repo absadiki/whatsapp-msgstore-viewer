@@ -16,51 +16,48 @@
             allow_stretch: True
             Tab:
                 title: "Chats"
-                ScrollView:
-                    do_scroll_y: True
+                RV:  
+                    id: contact_chat_list
+                    viewclass: 'ChatListItem'
                     bar_width: 10
                     scroll_type: ['content', 'bars']
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        md_bg_color: app.theme_cls.bg_normal
+                    key_size: 'height'
+                    RecycleBoxLayout:
+                        default_size: None, dp(72)
+                        default_size_hint: 1, None
                         size_hint_y: None
-                        adaptive_height: True
-                        padding: [0, 0, 0, 40]
-                        MDList:
-                            id: contact_chat_list
-                            spacing: 10
+                        height: self.minimum_height
+                        orientation: 'vertical'
 
             Tab:
                 title: "Groups"
-                ScrollView:
-                    do_scroll_y: True
+                RV:  
+                    id: group_chat_list
+                    viewclass: 'ChatListItem'
                     bar_width: 10
                     scroll_type: ['content', 'bars']
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        md_bg_color: app.theme_cls.bg_normal
+                    key_size: 'height'
+                    RecycleBoxLayout:
+                        default_size: None, dp(72)
+                        default_size_hint: 1, None
                         size_hint_y: None
-                        adaptive_height: True
-                        padding: [0, 0, 0, 40]
-                        MDList:
-                            id: group_chat_list
-                            spacing: 10
+                        height: self.minimum_height
+                        orientation: 'vertical'
 
             Tab:
                 title: "Calls"
-                ScrollView:
-                    do_scroll_y: True
-                    scroll_type: ['content', 'bars']
+                RV:  
+                    id: calls
+                    viewclass: 'CallListItem'
                     bar_width: 10
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        md_bg_color: app.theme_cls.bg_normal
+                    scroll_type: ['content', 'bars']
+                    key_size: 'height'
+                    RecycleBoxLayout:
+                        default_size: None, dp(72) 
+                        default_size_hint: 1, None
                         size_hint_y: None
-                        adaptive_height: True
-                        padding: [0, 0, 0, 40]
-                        MDList:
-                            id: calls
-                            spacing: 10
+                        height: self.minimum_height
+                        orientation: 'vertical'
 
 
 

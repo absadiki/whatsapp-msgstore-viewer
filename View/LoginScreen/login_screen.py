@@ -22,6 +22,7 @@ from kivymd.uix.relativelayout import MDRelativeLayout
 from kivymd.uix.spinner import MDSpinner
 from Utility.Utils import check_path
 from View.base_screen import BaseScreenView
+import json
 
 
 class TextFieldFileManager(MDRelativeLayout):
@@ -236,3 +237,32 @@ class LoginScreenView(BaseScreenView):
         The view in this method tracks these changes and updates the UI
         according to these changes.
         """
+
+    def on_kv_post(self, base_widget):
+        self.ids.msgstore_file_path.bind(text=self.save_fields)
+        self.ids.wa_file_path.bind(text=self.save_fields)
+        self.ids.wp_dir.bind(text=self.save_fields)
+        self.ids.db_version.bind(text=self.save_fields)
+
+
+    def save_fields(self, *args):
+        data = {
+            'msgstore_file_path': self.ids.msgstore_file_path.text,
+            'wa_file_path': self.ids.wa_file_path.text,
+            'wp_dir': self.ids.wp_dir.text,
+            'db_version': self.ids.db_version.text
+        }
+        with open("login_data.json", "w") as f:
+            json.dump(data, f)
+    
+    def on_pre_enter(self, *args):
+        try:
+            with open("login_data.json", "r") as f:
+                data = json.load(f)
+                self.ids.msgstore_file_path.text = data.get('msgstore_file_path', '')
+                self.ids.wa_file_path.text = data.get('wa_file_path', '')
+                self.ids.wp_dir.text = data.get('wp_dir', '')
+                self.ids.db_version.text = data.get('db_version', '')
+                self.app.db_version = data.get('db_version', '')
+        except FileNotFoundError:
+            pass

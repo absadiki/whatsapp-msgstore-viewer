@@ -21,7 +21,7 @@ from Utility.Utils import fix_emojis, check_path
 from View.MainScreen.main_screen import MLabel
 from View.base_screen import BaseScreenView
 import webbrowser
-
+from kivy.clock import Clock
 
 class RV(RecycleView):
     def __init__(self, **kwargs):
@@ -141,6 +141,11 @@ class ChatScreenView(BaseScreenView):
     def show_chat_messages(self, chat_messages):
         self.ids.rvbox.clear_widgets()
         self.ids.rv.data = chat_messages
+
+        Clock.schedule_once(lambda dt: self.scroll_to_bottom(), 0)
+        
+    def scroll_to_bottom(self):
+        self.ids.rv.scroll_y = 0 
 
     def model_is_changed(self) -> None:
         """

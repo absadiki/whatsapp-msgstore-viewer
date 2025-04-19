@@ -15,6 +15,8 @@ from kivymd.uix.tab import MDTabsBase
 from Utility.Utils import fix_emojis
 from View.base_screen import BaseScreenView
 
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+
 
 class Tab(MDFloatLayout, MDTabsBase):
     pass
@@ -25,7 +27,7 @@ class MLabel(MDLabel):
         super().__init__(**kwargs)
 
 
-class ChatListItem(MDCard):
+class ChatListItem(RecycleDataViewBehavior, MDCard):
     controller = ObjectProperty()
     id = ObjectProperty()
     jid = StringProperty()
@@ -34,7 +36,7 @@ class ChatListItem(MDCard):
     timestamp = StringProperty()
 
 
-class CallListItem(MDCard):
+class CallListItem(RecycleDataViewBehavior, MDCard):
     # controller = ObjectProperty()
     id = ObjectProperty()
     jid = StringProperty()
@@ -66,48 +68,31 @@ class MainScreenView(BaseScreenView):
         pass
 
     def show_chats_list(self, contact_chats):
-        for chat in contact_chats:
-            chatitem = ChatListItem()
-            chatitem.controller = self.controller
-            chatitem.id = chat['_id']
-            chatitem.contact_name = chat["user"]
-            if chat['text_data'] is not None:
-                chatitem.last_message = fix_emojis(chat['text_data'], self.app.emojis_font)
-            else:
-                chatitem.last_message = ''
-            chatitem.timestamp = '\n'.join(chat['timestamp'].split(' '))
-            chatitem.jid = chat['raw_string_jid']
-            self.ids['contact_chat_list'].add_widget(chatitem)
+        self.ids.contact_chat_list.data = [{
+            'controller': self.controller,
+            'id': chat['_id'],
+            'contact_name': chat["user"],
+            'last_message': fix_emojis(chat['text_data'], self.app.emojis_font) if chat['text_data'] else '',
+            'timestamp': '\n'.join(chat['timestamp'].split(' ')),
+            'jid': chat['raw_string_jid'],
+        } for chat in contact_chats]
 
     def build_group_chat_list(self, group_chats):
-        for chat in group_chats:
-            user = fix_emojis(chat['user'], self.app.emojis_font)
-            last_message = ''
-            if chat['text_data'] is not None:
-                last_message = fix_emojis(chat['text_data'], self.app.emojis_font)
-            timestamp = '\n'.join(chat['timestamp'].split(' '))
-            item = ChatListItem(id=chat['_id'],
-                                contact_name=user,
-                                last_message=last_message,
-                                timestamp=timestamp,
-                                controller=self.controller)
-            self.ids['group_chat_list'].add_widget(item)
+        self.ids.group_chat_list.data = [{
+            'id': chat['_id'],
+            'contact_name': fix_emojis(chat['user'], self.app.emojis_font),
+            'last_message': fix_emojis(chat['text_data'], self.app.emojis_font) if chat['text_data'] else '',
+            'timestamp': '\n'.join(chat['timestamp'].split(' ')),
+            'controller': self.controller,
+        } for chat in group_chats]
 
     def build_calls_list(self, calls):
-        for call in calls:
-            id = call['_id']
-            jid = call['raw_string_jid']
-            user = fix_emojis(call['user'], self.app.emojis_font)
-            from_me = call['from_me']
-            video_call = call['video_call']
-            timestamp = call['timestamp']
-            duration = str(call['duration'])
-            item = CallListItem(id=id,
-                                jid=jid,
-                                user=user,
-                                from_me=from_me,
-                                video_call=video_call,
-                                timestamp=timestamp,
-                                duration=duration
-                                )
-            self.ids['calls'].add_widget(item)
+        self.ids.calls.data = [{
+            'id': call['_id'],
+            'jid': call['raw_string_jid'],
+            'user': fix_emojis(call['user'], self.app.emojis_font),
+            'from_me': call['from_me'],
+            'video_call': call['video_call'],
+            'timestamp': call['timestamp'],
+            'duration': str(call['duration']),
+        } for call in calls]

@@ -5,7 +5,7 @@ from typing import NoReturn
 
 import multitasking
 
-from Utility.Utils import check_path
+from Utility.Utils import check_path, strip_quotes
 
 multitasking.set_max_threads(10)
 
@@ -134,24 +134,19 @@ Visit their Github page for more information or to get some help:
     def on_tap_button_login(self) -> NoReturn:
         """Called when the `LOGIN` button is pressed."""
         self.view.show_dialog('Login ...', title='Please wait ...', auto_dismiss=False)
-        self.view.app.msgstore_file = None if self.view.ids['msgstore_file_path'].text == '' else self.view.ids[
-            'msgstore_file_path'].text
-        self.view.app.wa_file = None if self.view.ids['wa_file_path'].text == '' else self.view.ids['wa_file_path'].text
-        self.view.app.wp_dir = None if self.view.ids['wp_dir'].text == '' else self.view.ids['wp_dir'].text
+        self.view.app.msgstore_file = None if self.view.ids['msgstore_file_path'].text == '' else strip_quotes(self.view.ids[
+            'msgstore_file_path'].text)
+        self.view.app.wa_file = None if self.view.ids['wa_file_path'].text == '' else strip_quotes(self.view.ids['wa_file_path'].text)
+        self.view.app.wp_dir = None if self.view.ids['wp_dir'].text == '' else strip_quotes(self.view.ids['wp_dir'].text)
         if not self.check_files():
             return
 
         if self.view.ids['enc_checkbox'].active:
             # decrypt first
-            key = self.view.key_file_widget.text
+            key = strip_quotes(self.view.key_file_widget.text)
             if key == '':
                 self.view.show_dialog('Encrypted database is selected but no key has been provided!', title='Error',
                                       auto_dismiss=True)
-                return
-            elif not check_path(key):
-                self.view.show_dialog(f'Please recheck the provided key path\n`{key}`'
-                                      f'\ndoes not exist',
-                                      title="Error", auto_dismiss=True)
                 return
             else:
                 # trying to decrypt
