@@ -43,7 +43,7 @@ from kivy import Config
 from PIL import ImageGrab
 
 resolution = ImageGrab.grab().size
-height = resolution[1]
+height = int(resolution[1] * 0.9)
 # width = str(int(resolution[0]/3))
 
 Config.set("graphics", "height", height)
