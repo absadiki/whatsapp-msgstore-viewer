@@ -14,7 +14,7 @@
     MDBoxLayout:
         # md_bg_color: 1, 0, 1, 1
         orientation: "vertical"
-        padding: [0, 0, 0, 10]
+        padding: [0, 15, 0, 20]
         spacing: 2
         Label:
             markup: True
@@ -38,7 +38,7 @@
                 size_hint: None, None
                 font_size: 18
                 size: 20, 20
-                pos_hint: {"center_x": .5, 'center_y': .5}
+                pos_hint: {"center_x": .5}
                 text_color: 'green' if root.from_me == 1 else 'red'
             MLabel:
                 id: timestamp

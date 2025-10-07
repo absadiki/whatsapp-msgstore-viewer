@@ -1,89 +1,138 @@
 <LoginScreenView>
     FitImage:
         source: "assets/images/bg.png"
+        md_bg_color: hex('#f5f1eb')
+
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: 15
-        FitImage:
-            source: "assets/images/logo.png"
-            padding: 4
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: None, None
-        MDLabel:
-            id: app_name
-            text: "Whatsapp Msgstore Viewer"
-            font_style: "H5"
+        orientation: 'vertical'
+        adaptive_height: True
+        pos_hint: {"top": 1}
+        padding: "30dp"
+        spacing: "35dp"
+        MDBoxLayout:
+            orientation: 'vertical'
             adaptive_height: True
-            halign: "center"
-        MDRectangleFlatIconButton:
-            text: "Check the source code on Github"
-            icon: "github"
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: None, None
-            on_press: root.open_github_page()
-        MDFloatLayout:
-            MDBoxLayout:
-                orientation: "vertical"
+            spacing: "15dp"
+            FitImage:
+                source: "assets/images/logo.png"
+                pos_hint: {"center_x": .5}
+                size_hint: None, None
+            MDLabel:
+                id: app_name
+                text: "Whatsapp Msgstore Viewer"
+                font_style: "H5"
                 adaptive_height: True
-                size_hint_x: None
-                width: root.width - dp(72)
-                radius: 12
-                padding: "12dp"
-                md_bg_color: 1, 1, 1, .5
-                pos_hint: {"center_x": .5, "center_y": .5}
+                halign: "center"
+            MDRectangleFlatIconButton:
+                text: "Check the source code on Github"
+                icon: "github"
+                md_bg_color: "white"
+                pos_hint: {"center_x": .5}
+                size_hint: None, None
+                on_press: root.open_github_page()
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            adaptive_height: True
+            radius: "12dp"
+            padding: "30dp"
+            spacing: "20dp"
+            md_bg_color: 1, 1, 1, .7
+            line_color: "lightgray"
+            TextFieldFileManager:
+                id: msgstore_file_path
+                hint_text: "msgstore.db file path"
+            TextFieldFileManager:
+                id: wa_file_path
+                hint_text: "wa.db file path (Optional)"
+                helper_text: "To view contact names instead of just their numbers"
+            TextFieldFileManager:
+                id: wp_dir
+                hint_text: "`Whatsapp` Directory (Optional)"
+                helper_text: "In case you want to view the media in the chat (audios, videos, images ...), \nleave it blank otherwise"
+            MDTextField:
+                id: db_version
+                text: app.db_version
+                hint_text: "Database version"
+                readonly: True
+                on_focus: if self.focus: root.menu.open()
+                helper_text: 'Check the github page for more details'
+            MDBoxLayout:
+                orientation: 'vertical'
+                adaptive_height: True
+                line_color: "lightgray" if root.ids.enc_checkbox.active else (0, 0, 0, 0)
                 MDBoxLayout:
-                    orientation: "vertical"
+                    orientation: 'horizontal'
                     adaptive_height: True
-                    padding: "25dp"
-                    spacing: "20dp"
-                    TextFieldFileManager:
-                        id: msgstore_file_path
-                        hint_text: "msgstore.db file path"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                    TextFieldFileManager:
-                        id: wa_file_path
-                        hint_text: "wa.db file path (Optional)"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        helper_text: "To view contact names instead of just their numbers"
-                    TextFieldFileManager:
-                        id: wp_dir
-                        hint_text: "`Whatsapp` Directory (Optional)"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                        helper_text: "In case you want to view the media in the chat (audios, videos, images ...), leave it blank otherwise"
-                    MDTextField:
-                        id: db_version
-                        pos_hint: {'center_x': .5, 'center_y': .5}
-                        text: app.db_version
-                        hint_text: "Database version"
-                        readonly: True
-                        on_focus: if self.focus: root.menu.open()
-                        helper_text: 'Check the github page for more details'
-                    MDBoxLayout:
-                        id: key_file_container
-                        orientation: 'horizontal'
-                        MDCheckbox:
-                            id: enc_checkbox
-                            size_hint: None, None
-                            size: "48dp", "48dp"
-                            pos_hint: {'center_x': .5, 'center_y': .5}
-                            on_active: root.on_enc_checkbox(self.active)
-                        MDLabel:
-                            markup: True
-                            text: "Encrypted database"
-                            font_style: "Body2"
-                            valign: "center"
-                            theme_text_color: 'Secondary'
-                    MDRoundFlatButton:
-                        text: "Advanced settings"
-                        on_release: root.open_settings()
+                    line_color: "lightgray" if root.ids.enc_checkbox.active else (0, 0, 0, 0)
+                    MDCheckbox:
+                        id: enc_checkbox
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        on_active: root.on_enc_checkbox(self.active)
+                    MDLabel:
+                        id: enc_checkbox_label
+                        markup: True
+                        text: "Encrypted database"
+                        font_style: "Body2"
+                        valign: "center"
+                        theme_text_color: 'Secondary'
 
-    MDFillRoundFlatButton:
-        text: "LOGIN" if not enc_checkbox.active else 'DECRYPT & LOGIN'
-        on_release: root.controller.on_tap_button_login()
-        pos_hint: {"center_x": .5, "center_y": .1}
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: self.minimum_height if root.ids.enc_checkbox.active else 0
+                    opacity: 1 if root.ids.enc_checkbox.active else 0
+                    MDCheckbox:
+                        id: enc_msgstore
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        color_active: 0.278, 0.545, 0.902, 1  # #478be6
+                        disabled: True
+                        on_active: root.on_enc_sub_checkbox()
+                    MDLabel:
+                        id: enc_msgstore_label
+                        text: "msgstore.db"
+                        valign: "center"
+                        theme_text_color: 'Secondary'
+                    MDCheckbox:
+                        id: enc_wa
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        color_active: 0.278, 0.545, 0.902, 1  # #478be6
+                        disabled: True
+                        on_active: root.on_enc_sub_checkbox()
+                    MDLabel:
+                        id: enc_wa_label
+                        text: "wa.db"
+                        valign: "center"
+                        theme_text_color: 'Secondary'
 
-    Attachment:
-        # not an attachment but same ui attributes
+                TextFieldFileManager:
+                    id: key_file_path
+                    padding: dp(15), 0, 0, "10dp"
+                    height: self.minimum_height if root.ids.enc_checkbox.active else 0
+                    opacity: 1 if root.ids.enc_checkbox.active else 0
+                    hint_text: "Key"
+                    helper_text: "To decrypt the database"
+                    disabled: True
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                adaptive_height: True
+                size_hint_x: 1
+                padding: 0, "15dp", 0, 0
+                MDRoundFlatButton:
+                    text: "Advanced settings"
+                    on_release: root.open_settings()
+                Widget:  # Spacer
+                MDFillRoundFlatButton:
+                    text: "LOGIN" if not enc_checkbox.active else 'DECRYPT & LOGIN'
+                    on_release: root.controller.on_tap_button_login()
+                    pos_hint: {"right": 1}
+
+    MDLabel:
+        # "About" link (replaces the invalid 'Attachment:' node)
         markup: True
         text: "[ref=about]About[/ref]"
         adaptive_height: True
@@ -92,6 +141,3 @@
         padding_y: dp(10)
         pos_hint: {"center_x": .5, "center_y": 0.025}
         on_ref_press: root.open_about()
-
-
-

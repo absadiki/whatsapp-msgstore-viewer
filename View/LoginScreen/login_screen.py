@@ -18,14 +18,13 @@ from kivymd.uix.button import MDFlatButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.relativelayout import MDRelativeLayout
 from kivymd.uix.spinner import MDSpinner
 from Utility.Utils import check_path
 from View.base_screen import BaseScreenView
 import json
 
 
-class TextFieldFileManager(MDRelativeLayout):
+class TextFieldFileManager(BoxLayout):
     text = StringProperty()
     hint_text = StringProperty()
     helper_text = StringProperty()
@@ -93,7 +92,6 @@ class About(BoxLayout):
 
 
 class LoginScreenView(BaseScreenView):
-
     def __init__(self, **kw):
         super(LoginScreenView, self).__init__(**kw)
         self.dialog = None
@@ -141,10 +139,6 @@ class LoginScreenView(BaseScreenView):
             content_cls=self.about,
         )
 
-        self.key_file_widget = TextFieldFileManager(id='key_file', hint_text="Key",
-                            pos_hint={"center_x": .5, "center_y": .5},
-                            helper_text="To decrypt the database")
-        
         self.login_data_file = os.path.join(self.app.user_data_dir, "login_data.json")
 
     def set_item(self, text__item):
@@ -169,15 +163,33 @@ class LoginScreenView(BaseScreenView):
             self.dialog.title = title + '\n'
         self.dialog.text = msg
         if auto_dismiss is False:
-            progress = MDSpinner(determinate=False, size_hint=(None, None), size=(48, 48), pos_hint={'right: 1'})
+            progress = MDSpinner(determinate=False, size_hint=(None, None), size=(48, 48), pos_hint={'right': 1})
             self.dialog.add_widget(progress)
         self.dialog.open()
 
+    def toggle_checkbox(self, checkbox_id):
+        cb = self.ids[checkbox_id]
+        cb.active = not cb.active
+
     def on_enc_checkbox(self, state, *args):
+        self.ids.enc_msgstore.disabled = not state
+        self.ids.enc_wa.disabled = not state
+
         if state:
-            self.ids.key_file_container.add_widget(self.key_file_widget)
+            self.ids.enc_msgstore.active = True
+            self.ids.enc_wa.active = True
+            self.on_enc_sub_checkbox()
         else:
-            self.ids.key_file_container.remove_widget(self.key_file_widget)
+            self.ids.enc_msgstore.active = False
+            self.ids.enc_wa.active = False
+            self.ids.key_file_path.disabled = True
+
+    def on_enc_sub_checkbox(self, *args):
+        show_key = self.ids.enc_msgstore.active or self.ids.enc_wa.active
+        self.ids.key_file_path.disabled = show_key is False
+
+        if not self.ids.enc_msgstore.active and not self.ids.enc_wa.active:
+            self.ids.enc_checkbox.active = False
 
     def open_settings(self):
         print('opening settings')
@@ -245,18 +257,25 @@ class LoginScreenView(BaseScreenView):
         self.ids.wa_file_path.bind(text=self.save_fields)
         self.ids.wp_dir.bind(text=self.save_fields)
         self.ids.db_version.bind(text=self.save_fields)
-
+        self.ids.enc_checkbox.bind(active=self.save_fields)
+        self.ids.enc_msgstore.bind(active=self.save_fields)
+        self.ids.enc_wa.bind(active=self.save_fields)
+        self.ids.key_file_path.bind(text=self.save_fields)
 
     def save_fields(self, *args):
         data = {
             'msgstore_file_path': self.ids.msgstore_file_path.text,
             'wa_file_path': self.ids.wa_file_path.text,
             'wp_dir': self.ids.wp_dir.text,
-            'db_version': self.ids.db_version.text
+            'db_version': self.ids.db_version.text,
+            'enc_checkbox': self.ids.enc_checkbox.active,
+            'enc_msgstore': self.ids.enc_msgstore.active,
+            'enc_wa': self.ids.enc_wa.active,
+            'key_file_path': self.ids.key_file_path.text
         }
         with open(self.login_data_file, "w") as f:
             json.dump(data, f)
-    
+
     def on_pre_enter(self, *args):
         try:
             with open(self.login_data_file, "r") as f:
@@ -266,5 +285,9 @@ class LoginScreenView(BaseScreenView):
                 self.ids.wp_dir.text = data.get('wp_dir', '')
                 self.ids.db_version.text = data.get('db_version', '')
                 self.app.db_version = data.get('db_version', '')
+                self.ids.enc_checkbox.active = data.get('enc_checkbox', False)
+                self.ids.enc_msgstore.active = data.get('enc_msgstore', False)
+                self.ids.enc_wa.active = data.get('enc_wa', False)
+                self.ids.key_file_path.text = data.get('key_file_path', '')
         except FileNotFoundError:
             pass

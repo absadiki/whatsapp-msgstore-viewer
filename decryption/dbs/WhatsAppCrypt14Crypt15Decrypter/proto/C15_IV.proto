@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-// In crypt15 files only the IV is stored.
-message C15_IV {
-    bytes IV = 1; // The 16-bytes long IV
-}
