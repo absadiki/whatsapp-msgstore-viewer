@@ -21,7 +21,7 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 __author__ = "absadiki"
 __copyright__ = "Copyright 2023"
 __license__ = "GPLv3"
-__version__ = "1.1.2"
+from version import __version__
 __github__ = "https://github.com/absadiki/whatsapp-msgstore-viewer"
 
 import importlib
@@ -150,8 +150,11 @@ class whatsappMsgstoreViewer(MDApp):
     #     if "meta" in modifiers or "ctrl" in modifiers and text == "r":
     #         self.rebuild()
 
-
-if __name__ == '__main__':
+def run():
     if hasattr(sys, '_MEIPASS'):
         resource_add_path(os.path.join(sys._MEIPASS))
     whatsappMsgstoreViewer().run()
+
+
+if __name__ == '__main__':
+    run()

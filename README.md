@@ -14,25 +14,30 @@ Free, open source and cross-platform app to decrypt, read and view the Whatsapp 
 
 
 # Installation
-* ### Download pre-built binaries
-Pre-built binaries are available on the releases page. 
-(Soon) 
-* ### From source
-  * Make sure you're using Python 3.9 or later
-  * Create and activate a virtual environment.
-  * Clone the repository
-  ```bash 
-  git clone https://github.com/absadiki/whatsapp-msgstore-viewer 
-  ```
-  * Install the requirements
-  ```bash 
-  pip install -r requirements.txt
-  ```
-  * Run the main script
-  ```bash 
-  python main.py 
-  ```
-> **Note:** Ubuntu users may run into some setup quirks. For guidance, see [#19](https://github.com/absadiki/whatsapp-msgstore-viewer/issues/19) 
+
+### Prerequisites
+- Python 3.9 or later
+
+### Quick Install (Recommended)
+```bash
+pip install git+https://github.com/absadiki/whatsapp-msgstore-viewer.git
+```
+
+### Running the Application
+After installation, start the application with:
+```bash
+wmv
+```
+
+### Development Setup
+For contributing or modifying the source:
+```bash
+git clone https://github.com/absadiki/whatsapp-msgstore-viewer
+cd whatsapp-msgstore-viewer
+pip install -e .
+```
+
+> **Note for Ubuntu users:** Additional system dependencies might be needed. See [#19](https://github.com/absadiki/whatsapp-msgstore-viewer/issues/19) for details.
 
 # Usage
 To use the app, you will need:

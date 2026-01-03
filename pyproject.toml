@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "whatsapp-msgstore-viewer"
+dynamic = ["version"]
+description = "A cross-platform app to decrypt, read and view WhatsApp msgstore.db database"
+readme = "README.md"
+authors = [
+    {name = "absadiki"}
+]
+license = {text = "GPL-3.0-or-later"}
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.8"
+
+# Dependencies from requirements.txt
+# Note: This is a temporary solution. You might want to move these to pyproject.toml
+dependencies = [
+    "watchdog",
+    "Kivy>=2.3.0",
+    "kivymd==1.2.0",
+    "pygame",
+    "Pillow>=10.0.0",
+    "requests~=2.28.2",
+    "multitasking~=0.0.11",
+    "javaobj-py3==0.4.3",
+    "pycryptodomex==3.17",
+    "protobuf==4.21.12",
+    "emoji"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "pytest",
+]
+
+[project.scripts]
+wmv = "main:run"
+
+[tool.setuptools]
+package-dir = { "" = "." }
+packages = ["dbs"]
+
+[tool.setuptools.package-data]
+"*" = ["assets/fonts/*", "View/*.kv"]
+
+[tool.setuptools.dynamic]
+version = {attr = "version.__version__"}
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'

@@ -10,3 +10,4 @@ javaobj-py3==0.4.3
 pycryptodomex==3.17
 protobuf==4.21.12
 emoji
+multitasking
