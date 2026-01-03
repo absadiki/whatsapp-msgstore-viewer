@@ -6,11 +6,11 @@ Free, open source and cross-platform app to decrypt, read and view the Whatsapp 
 </p>
 
 # Features
-* View contact and group chats. 
+* View contact and group chats.
 * View call logs with their durations.
-* Easy access to media files (images, audios and videos) from inside the chat, if the local Whatsapp directory has been provided. 
-* Decrypt and view the database if you have the decryption `key` (Should support **crypt12**, **crypt14** and **crypt15**).
-* Cross-platform (Should work on Linux, Windows and Mac)
+* Easy access to media files (images, audio, and video) from within the chat, if the local WhatsApp directory has been provided.
+* Decrypt and view the database if you have the decryption `key` (Should support **crypt12**, **crypt14**, and **crypt15**).
+* Cross-platform (Should work on Linux, Windows, and Mac)
 
 
 # Installation
@@ -18,7 +18,7 @@ Free, open source and cross-platform app to decrypt, read and view the Whatsapp 
 Pre-built binaries are available on the releases page. 
 (Soon) 
 * ### From source
-  * Make sure you’re using Python 3.9
+  * Make sure you're using Python 3.9 or later
   * Create and activate a virtual environment.
   * Clone the repository
   ```bash 
@@ -38,66 +38,50 @@ Pre-built binaries are available on the releases page.
 To use the app, you will need:
 * The `msgstore.db` (`msgstore.db.cryptX` if it is encrypted) database: It is a database where Whatsapp is storing all your messages.
 * The `wa.db` database: It is a database where Whatsapp is storing contact names. It is optional, so if it is not provided you will just see phone numbers.
-* The `Whatsapp directory`: The directory of Whatsapp in the local storage of your phone. This will be used to view the media files (Optional as well).
-* The `key`: If your database is encrypted, you will need to provide the decryption key to decrypt it first. The decrypted database will be stored in the same directory of your encrypted database suffixed with `-decrypted.db`
-  (See bellow for more information).
+* The `WhatsApp directory`: The directory of WhatsApp in the local storage of your phone. This will be used to view the media files (Optional as well).
+* The `key`: If your database is encrypted, you will need to provide the decryption key to decrypt it. The decrypted database will be stored in the same directory as your encrypted database with a `-decrypted.db` suffix.
+  (See below for more information).
 
 # Notes
-* #### Where to find the databases
-Check the great tutorial "[Retrieving WhatsApp Databases](https://github.com/Dexter2389/whatsapp-backup-chat-viewer#retrieving-whatsapp-databases)" made by [@Dexter2389](https://github.com/Dexter2389).
+#### Where to find the databases
+Check out the great tutorial "[Retrieving WhatsApp Databases](https://github.com/Dexter2389/whatsapp-backup-chat-viewer#retrieving-whatsapp-databases)" by [@Dexter2389](https://github.com/Dexter2389).
 
-* #### About the decryption process
-The app is using the [WhatsApp-Crypt14-Crypt15-Decrypter](https://github.com/ElDavoo/WhatsApp-Crypt14-Crypt15-Decrypter) by [ElDavoo](https://github.com/ElDavoo) under the hood.
-Please check their repository if you face any issues with the decryption. 
-* #### About the Database schema
-Because this app is only a reverse engineering attempt of the Whatsapp database, it is very likely that it might break
-in case there have been any updates to the `msgstore` database.
-<br/>
-For now it supports just the schema of my personal `msgstore.db` file.
-<br/>
-So I made it easy to allow the community to add support to more schemas (It's a simple SQLite exercise :D).
-<br/>
-All contributions are welcome. Feel free to let me know if you need any help.
-<br/>
-Follow these steps in order to add support to other schemas (see `db/v1/db.py` as an example):
+#### About the decryption process
+The app uses the [WhatsApp-Crypt14-Crypt15-Decrypter](https://github.com/ElDavoo/WhatsApp-Crypt14-Crypt15-Decrypter) by [ElDavoo](https://github.com/ElDavoo) under the hood.
+Please check their repository if you face any issues with the decryption.
+
+#### About the Database schema
+This app is a reverse engineering attempt of the WhatsApp database and has been tested with my personal `msgstore.db` file. It might break if there are any updates to the `msgstore` database schema.
+
+I've made it easy to add support for more schemas (It's a simple SQLite exercise :D).
+
+All contributions are welcome.
+
+Follow these steps to add support for other schemas (see `db/v1/db.py` as an example):
 * Create a package in the `dbs` package and give your schema a name (for example `v2`).
-* Inside the newly created package, create a python module `db.py`.
+* Inside the newly created package, create a Python module `db.py`.
 * Inherit the abstract class `AbstractDatabase` located in the `dbs/abstract_db.py` module.
-* The app will dynamically load existing schemas when starting. 
-* Submit a pull request. 
+* The app will dynamically load existing schemas when starting.
+* Submit a pull request.
 
-* #### About different languages
+#### About different languages
 
-  - You might face an issue where the messages are being displayed in a wierd way (square characters).
-  This is probably a font issue. To fix that, search for a font that supports your language, and on the login screen, go to
-  `advanced settings` and provide the path to your font.
+  - You might encounter an issue where messages are displayed incorrectly (as square characters).
+  This is likely a font issue. To resolve this, find a font that supports your language and specify its path in the `advanced settings` on the login screen.
   - For RTL languages, please see [RTL Support #8](https://github.com/absadiki/whatsapp-msgstore-viewer/discussions/8)
 
 # Contributing
 If you find a bug, have a suggestion or feedback, please open an issue for discussion.
 
-# Credits
-
-- [kivy](https://kivy.org) & [KivyMD](https://kivymd.readthedocs.io) for the UI framework.
-- [WhatsApp-Redesign](https://github.com/haddiebakrie/WhatsApp-Redesign) for the design inspiration and some UI components.
-- [WhatsApp-Crypt14-Crypt15-Decrypter](https://github.com/ElDavoo/WhatsApp-Crypt14-Crypt15-Decrypter) for the decryption algorithm.
-- [Sbk2605](https://commons.m.wikimedia.org/wiki/File:Whatsapp_logo.jpg) for the Whatsapp logo (Licenced under [Creative Commons Attribution-Share Alike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/deed.en)).
-- [whatsapp-chat-parser-website](https://github.com/Pustur/whatsapp-chat-parser-website) for the background image.
-<br/>
-And so many more libraries and frameworks.
-
 
 # License
 
-This project is licensed under the GNU General Licence version 3 or later. You can modify or redistribute it under the conditions
-of these licences (See [LICENSE](./LICENSE) for more information).
+This project is licensed under the GNU General Public License version 3 or later. You can modify or redistribute it under the conditions
+of these licenses (See [LICENSE](./LICENSE) for more information).
 
 # DISCLAIMER
 This project is not endorsed or certified by WhatsApp Inc. and is meant for **personal and educational purposes only**.
-<br/>
-It is provided as is without any express or implied warranties.<br>
-The authors/maintainers/contributors assume no responsibility for errors or omissions, or for damages resulting from the use of the information contained herein.<br>
 
+It is provided 'as is' without any express or implied warranties.
 
-
-
+The authors, maintainers, and contributors assume no responsibility for errors, omissions, or damages resulting from the use of this information.
